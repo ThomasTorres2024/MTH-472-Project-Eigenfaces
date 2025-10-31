@@ -58,3 +58,61 @@ We can recognize new faces that are in our dataset by performing the following p
 
 ---
 # Calculation of Eigenfaces 
+To reiterate, if our images are $256 \times 256$, it turns out that our dataset lies in $R^{256^2}$, which is a massive space. However, faces are quite similar, and span a lower dimensional subspace in this much larger space. By using PCA, we hope to find the vectors which best define the face subspace within the larger image space (I'm pretty sure this is why we care about variable importance here)
+
+I already wrote something similar to this part above but I'll do it again because we need to use their notation. Let the set of face images be $\Gamma_{1},\Gamma_{2},\cdots,\Gamma_{n}$. The average of the face set is given by:
+$$\Psi=\frac{1}{M} \sum_{n=1}^M \Gamma_{n}$$
+We denote the difference between the $i$th image and the mean as:
+$$\Phi_{i}=\Gamma_{i}-\Psi$$
+We then run PCA on the matrix of the new $\Phi_{i}$'s such that we obtain a set of $M$ orthonormal vectors, $u_{n}$ that describe the distribution of our data. We select our eigen vectors by considering the following formula for $k$:
+$$\lambda_{k}=\frac{1}{M}\sum_{n=1}^M(u_{k}^T\Phi_{n})^2$$
+$u_{k}$ is chosen such that $\lambda_{k}$ is a maximum subject to the [[Kronecker Delta]]:
+$$u_{j}^Tu_{k}=\begin{cases} 1 & \text{if } i=j\\ 0 & \text{ else} \end{cases} $$
+The vectors $u_{k}$ are the eigen vectors with the corresponding eigen values $\lambda_{k}$ of the [[Covariance Matrix]]:
+$$C=\frac{1}{M} \sum_{n=1}^M \Phi_{n}\Phi_{n}^T=AA^T$$
+Where $A=[\Phi_{1} \Phi_{2} \cdots \Phi_{M}]$. The resulting matrix, $C \in \mathbb{R}^{n^2 \times n^2}$, which requires us to find $n^2$ eigen vectors and eigen values, which is a tremendous amount of work.  
+
+If $M < N^2$, it follows that there are only $M-1$ meaningful eigen vectors. All of the other eigen-vectors have an eigen value of 0, and are not very telling. 
+
+It turns out that we can solve for the eigen vectors in an $M \times M$ matrix rather than the $N^2 \times N^2$ matrix, for instance solving a $16 \times 16$ matrix rather than solving the eigen values and vectors for $(128)^2 \times (128)^2$. 
+
+There is a transformation we can do between eigen vectors of $A^TA$ and $AA^T$ which gets us an eigen vector of $AA^T$ for an additional cost. Using $A^TA$, we can write our an eigen vector-value for it:
+$$A^TAv_{i}=\mu v_{i}$$
+$$AA^TAv_{i}=\mu A v_{i}$$
+$$AA^Ty=\mu y$$
+Which means that $Av_{i}$ is an eigen vector of $AA^T$. All we need to do is compute $v_{i}$ and then we can basically get the eigen vectors of $AA^T$. We can now find the eigen values of $L=A^TA$, where $L_{mn}=A_{m}^TA_{n}$, from which can we can find the $M$ eigenvectors $v_{l}$ of $L$. These vectors can be used to compute the eigen vectors of $AA^T$, the covariance matrix:
+$$u_{j}=Av_{j}=\sum_{i=1}^Mv_{ji}A_{i}$$
+This brings the overall order down from a computation which is $O(n^2)$ to one which is $O(m)$. Generally, the number of training images is quite small compared to the size of these images, so:
+$$M \ll N^2$$
+Finding the eigen values here allows us to get an idea of how important each eigenface is. From this section, we have found a way to compute eigenfaces that span the facespace. We have found a way to do it in a manner which is computationally efficient and uses $M$, as well as connect it with the broader idea of PCA. 
+
+### Face Classification 
+The vectors $u_{j}$ that we just calculated span the facespace, and are moreover a basis for it since they are linearly independent because they are already known to be mutually orthonormal. We denote this facespace that the images span to be $M'$, which generally is smaller than the original $N^2$ image space. When choosing the eigen vectors to span $M'$, we choose the eigen vectors with the largest associated eigen values 
+
+If we recall, since we have an orthogonal basis for our set, and a face image should belong to $M'$, we can calculate a representation of the new Image (since the image is a part of the face space assumable) with respect to our new coordinates by doing the following:
+$$w_{k}=u^T_{k}(\Gamma-\Psi)=u_{k}^T\sum_{i=1}^Mc_{i}u_{i}^T$$
+This makes sense because we can just annihilate the other orthogonal parts by left multiplying by each orthonormal vector we just generated. In turn, this gives us the corresponding weight needed at each step. So, we now have a vector of weights which describes the image, $\Gamma$, projected down onto the face subspace $M'$, let us denote this vector by:
+$$\Omega^T=[w_{1},w_{2},\cdots w_{m}]$$We can interpret each weight in $\Omega$ as the amount that each eigenface contributes to representing our current image. We can then try and cross reference this weight vector with other weight vectors, and try and determine which of the vectors we already have within our seen/training set most closely matches our new vector $\Omega$. One simple way of doing this is by iterating over all such vectors in the train set and computing:
+$$\text{kth error }=\epsilon_{k}=\|\Omega-\Omega_{k}\|^2$$
+Each $\Omega_{k}$ is an average over some of the projections onto $M$ for an individual (I think this is because we can't really encode for 1 person just through 1 image, we need a couple images, maybe from different angles too which was something mentioned earlier). We can assign a face to a class when its error is beneath some chosen threshold, $\theta_{\epsilon}$ (one of the first hyperparameters I've seen reading this). If $e_{k} \not \leq \theta_{\epsilon}$, then we say that the face is unknown, and potentially we make a new face class for it. 
+
+A point of concern about the layout of our problem is that when we project an image down onto $M'$, it is possible that the image looks nothing like a face, and is still close to actual faces within our face subspace. I'm a bit confused on this part, so I'll temporarily skip it. There's some way to calculate if you're close to a class? Not really sure.  
+
+This is basically it for the baseline algorithm, and from this we have 4 outputs from classification
+- 1.) We get a face we have already seen 
+- 2.) We get a face, but we have not seen it so it is unknown (in face space but not near a known class)
+- 3.) We get an image close to a face class, but not in the face space, it is not a face
+- 4.) We get an image distant from a face class, and it is not in the face space, it is not a face 
+
+---
+# Base Algorithm Overview 
+
+Here is the overall approach of the algorithm. 
+1. Get a characteristic set of face images of known people, we need multiple face pictures from the same people, some variation in expression and lighting (for 10 people, 4 images each, so $M=40$)
+2. Calculate $L$, and find its eigen values and then $M'$ with its eigenvectors such that we choose the most significant ones
+3. Compute the eigenfaces, the eigen vectors of the Covariance matrix, $u_{k}$ 
+4. For each known individual get the class vector, $\Omega_{k}$, average eigen face pattern vectors, choose a threshold for maximum dist from face class, and a threshold for the max distance from the face space
+5. For any new image identified, calculate its pattern vector $\Omega$,  distances to each class $\epsilon_{i}$, distance to face space
+	*  If $e_{k} < \theta_{e}$ and $\epsilon < \theta_{\epsilon}$, then classify the image as associated with individual $k$ 
+	* If the minimum distance $\epsilon_{k} > \theta_{\epsilon}$ (above threshold for class), but distance puts us in the face space $(\epsilon \leq \theta_{\epsilon})$, then we have an unknown (possible to start a new face class here)
+6. If the individual is seen already, then maybe we could add it to the original faces or recalculate eigenfaces, which makes sense as we encounter more and more individuals 
