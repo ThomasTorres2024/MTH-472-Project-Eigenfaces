@@ -1,0 +1,175 @@
+{
+  "main": {
+    "id": "66ef0698e6d225a6",
+    "type": "split",
+    "children": [
+      {
+        "id": "16c299aea6a8d44d",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "23293ee26c577fd3",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Overview of t-Distributed Stochastic Neighbor Embedding.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Overview of t-Distributed Stochastic Neighbor Embedding"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "6d0376ce517b528c",
+    "type": "split",
+    "children": [
+      {
+        "id": "f1734618a3252580",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "c8671c5dfdb60c2e",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "72b4bfdd6964ffe1",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "3773baa487ab1e01",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 200,
+    "collapsed": true
+  },
+  "right": {
+    "id": "32366e9bb9b4858c",
+    "type": "split",
+    "children": [
+      {
+        "id": "1a14265697bb863c",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "0fb0a8eee83e5cdc",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Overview of t-Distributed Stochastic Neighbor Embedding.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for Overview of t-Distributed Stochastic Neighbor Embedding"
+            }
+          },
+          {
+            "id": "dd038b50d057a1b2",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Overview of t-Distributed Stochastic Neighbor Embedding.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from Overview of t-Distributed Stochastic Neighbor Embedding"
+            }
+          },
+          {
+            "id": "fed1f21552bb9711",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "b27bc39acb8d9c7d",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Overview of t-Distributed Stochastic Neighbor Embedding.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of Overview of t-Distributed Stochastic Neighbor Embedding"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "23293ee26c577fd3",
+  "lastOpenFiles": []
+}
